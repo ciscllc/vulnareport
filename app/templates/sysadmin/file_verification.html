@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Datei-Verifizierung – Vulnerability Report{% endblock %}
+{% block content %}
+<div class="card" style="max-width:600px;">
+  <h2>Datei-Verifizierung für {{ domain.fqdn }}</h2>
+  <p>Lege eine Datei mit folgendem Inhalt unter dieser URL ab:</p>
+  <p><code>{{ file_url }}</code></p>
+  <p>Dateiinhalt (genau dieser Text):</p>
+  <p><code>{{ token }}</code></p>
+  <form method="post">
+    <button type="submit">Jetzt prüfen</button>
+  </form>
+  <p class="muted">Der Token ist zeitlich begrenzt gültig. Nach erfolgreicher Prüfung kann die Datei wieder entfernt werden.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Domain eintragen – Vulnerability Report{% endblock %}
+{% block content %}
+<div class="card" style="max-width:520px;">
+  <h2>Domain eintragen</h2>
+  <form method="post">
+    <label>Domain (ohne https://, z.B. example.org)</label>
+    <input type="text" name="fqdn" placeholder="example.org" required>
+
+    <label>Verifizierungsmethode</label>
+    <select name="verification_method" required>
+      <option value="email">E-Mail-Bestätigung (an admin@/webmaster@/hostmaster@ oder WHOIS-Kontakt)</option>
+      <option value="file">Datei-Upload-Nachweis (Token-Datei auf dem Webserver ablegen)</option>
+      <option value="admin_queue">Manuelle Prüfung durch Vulnerability-Report-Admin</option>
+    </select>
+
+    <label>Notiz für manuelle Prüfung (optional, nur bei Admin-Prüfung relevant)</label>
+    <textarea name="admin_note" rows="3" placeholder="z.B. Nachweis der Inhaberschaft, Kontext..."></textarea>
+
+    <button type="submit">Weiter</button>
+  </form>
+  <p class="muted">Erst nach erfolgreicher Verifizierung wird die Domain in den Scan-Pool aufgenommen.</p>
+</div>
+{% endblock %}

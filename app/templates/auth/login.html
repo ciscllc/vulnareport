@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Login – Vulnerability Report{% endblock %}
+{% block content %}
+<div class="card" style="max-width:400px;margin:0 auto;">
+  <h2>Login</h2>
+  <form method="post">
+    <label>E-Mail</label>
+    <input type="email" name="email" required>
+    <label>Passwort</label>
+    <input type="password" name="password" required>
+    <button type="submit">Einloggen</button>
+  </form>
+  <p class="muted">Noch kein Konto? <a href="{{ url_for('auth.register') }}">Registrieren</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Domains – Admin-Panel{% endblock %}
+{% block content %}
+<h1>Domains</h1>
+<p><a href="{{ url_for('admin.dashboard') }}">&larr; zurück</a></p>
+
+<p class="muted">
+  Filter:
+  <a href="{{ url_for('admin.domains') }}">alle</a> ·
+  <a href="{{ url_for('admin.domains', status='pending') }}">ausstehend</a> ·
+  <a href="{{ url_for('admin.domains', status='verified') }}">verifiziert</a> ·
+  <a href="{{ url_for('admin.domains', status='blacklisted') }}">blacklistet</a> ·
+  <a href="{{ url_for('admin.domains', status='rejected') }}">abgelehnt</a>
+</p>
+
+{% if not domains %}
+  <p class="muted">Keine Domains gefunden.</p>
+{% else %}
+<table>
+  <tr><th>Domain</th><th>Owner</th><th>Status</th><th>Methode</th><th>Notiz</th><th>Aktionen</th></tr>
+  {% for d in domains %}
+  <tr>
+    <td>{{ d.fqdn }}</td>
+    <td>{{ d.owner.email }}</td>
+    <td><span class="badge badge-{{ d.status.value }}">{{ d.status.value }}</span></td>
+    <td>{{ d.verification_method.value }}</td>
+    <td class="muted">{{ d.admin_note or '–' }}</td>
+    <td>
+      {% if d.status.value == 'pending' and d.verification_method.value == 'admin_queue' %}
+        <form class="inline" method="post" action="{{ url_for('admin.approve', domain_id=d.id) }}">
+          <button type="submit" style="padding:0.15rem 0.5rem;font-size:0.8rem;">Freigeben</button>
+        </form>
+        <form class="inline" method="post" action="{{ url_for('admin.reject', domain_id=d.id) }}">
+          <button type="submit" class="danger" style="padding:0.15rem 0.5rem;font-size:0.8rem;">Ablehnen</button>
+        </form>
+      {% else %}
+        <span class="muted">–</span>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

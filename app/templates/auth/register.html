@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Registrieren – Vulnerability Report{% endblock %}
+{% block content %}
+<div class="card" style="max-width:400px;margin:0 auto;">
+  <h2>Registrieren</h2>
+  <form method="post">
+    <label>E-Mail</label>
+    <input type="email" name="email" required>
+    <label>Passwort</label>
+    <input type="password" name="password" required minlength="8">
+    <button type="submit">Konto erstellen</button>
+  </form>
+  <p class="muted">Bereits registriert? <a href="{{ url_for('auth.login') }}">Login</a></p>
+</div>
+{% endblock %}

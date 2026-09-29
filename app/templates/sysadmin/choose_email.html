@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}E-Mail wählen – Vulnerability Report{% endblock %}
+{% block content %}
+<div class="card" style="max-width:520px;">
+  <h2>Verifizierungs-E-Mail für {{ domain.fqdn }}</h2>
+  <form method="post">
+    <label>An welche Adresse soll die Bestätigungsmail gehen?</label>
+    <select name="address" required>
+      {% for addr in addresses %}
+        <option value="{{ addr }}">{{ addr }}</option>
+      {% endfor %}
+    </select>
+    <p class="muted">Vorgeschlagen: Standard-Adressen (admin@, webmaster@, hostmaster@) sowie ggf. der im WHOIS hinterlegte Kontakt.</p>
+    <button type="submit">Bestätigungsmail senden</button>
+  </form>
+</div>
+{% endblock %}

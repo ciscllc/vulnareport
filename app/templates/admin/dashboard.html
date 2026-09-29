@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Admin-Panel – Vulnerability Report{% endblock %}
+{% block content %}
+<h1>Admin-Panel</h1>
+
+<div class="stat-grid">
+  <div class="stat-box"><div class="value">{{ total_domains }}</div><div class="label">Domains gesamt</div></div>
+  <div class="stat-box"><div class="value">{{ verified }}</div><div class="label">Verifiziert</div></div>
+  <div class="stat-box"><div class="value">{{ pending }}</div><div class="label">Ausstehend</div></div>
+  <div class="stat-box"><div class="value">{{ blacklisted }}</div><div class="label">Blacklistet</div></div>
+  <div class="stat-box"><div class="value">{{ open_findings }}</div><div class="label">Offene Findings</div></div>
+  <div class="stat-box"><div class="value">{{ total_findings }}</div><div class="label">Findings gesamt</div></div>
+  <div class="stat-box"><div class="value">{{ sent_mails }}</div><div class="label">Mails versendet</div></div>
+  <div class="stat-box"><div class="value">{{ failed_mails }}</div><div class="label">Mails fehlgeschlagen</div></div>
+</div>
+
+<p>
+  <a class="btn" href="{{ url_for('admin.domains') }}">Domains verwalten</a>
+  <a class="btn secondary" href="{{ url_for('admin.plugins') }}">Plugins</a>
+  <a class="btn secondary" href="{{ url_for('admin.mail_log') }}">Mail-Log</a>
+</p>
+
+<div class="card">
+  <h3>Findings nach Plugin</h3>
+  {% if findings_by_plugin %}
+  <table>
+    <tr><th>Plugin</th><th>Anzahl Findings</th></tr>
+    {% for name, count in findings_by_plugin %}
+    <tr><td>{{ name }}</td><td>{{ count }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">Noch keine Findings.</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h3>Letzte Findings</h3>
+  {% if recent_findings %}
+  <table>
+    <tr><th>Domain</th><th>Titel</th><th>Severity</th><th>Gefunden</th><th>Mail</th></tr>
+    {% for f in recent_findings %}
+    <tr>
+      <td>{{ f.domain.fqdn }}</td>
+      <td>{{ f.title }}</td>
+      <td><span class="badge badge-{{ f.severity.value }}">{{ f.severity.value }}</span></td>
+      <td>{{ f.found_at.strftime('%d.%m.%Y %H:%M') }}</td>
+      <td>{{ 'gesendet' if f.mailed_at else 'ausstehend' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">Noch keine Findings.</p>
+  {% endif %}
+</div>
+{% endblock %}

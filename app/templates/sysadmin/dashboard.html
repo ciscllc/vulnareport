@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Meine Domains – Vulnerability Report{% endblock %}
+{% block content %}
+<h1>Meine Domains</h1>
+<p><a class="btn" href="{{ url_for('sysadmin.add_domain') }}">+ Domain eintragen</a></p>
+
+{% if not domains %}
+  <p class="muted">Noch keine Domains eingetragen.</p>
+{% else %}
+<table>
+  <tr><th>Domain</th><th>Status</th><th>Methode</th><th>Zuletzt gescannt</th><th>Aktionen</th></tr>
+  {% for d in domains %}
+  <tr>
+    <td>{{ d.fqdn }}</td>
+    <td><span class="badge badge-{{ d.status.value }}">{{ d.status.value }}</span></td>
+    <td>{{ d.verification_method.value }}</td>
+    <td>{{ d.last_scanned_at.strftime('%d.%m.%Y %H:%M') if d.last_scanned_at else '–' }}</td>
+    <td>
+      <a href="{{ url_for('sysadmin.domain_findings', domain_id=d.id) }}">Findings</a>
+      {% if d.status.value != 'blacklisted' %}
+      · <form class="inline" method="post" action="{{ url_for('sysadmin.blacklist_domain', domain_id=d.id) }}" onsubmit="return confirm('Domain wirklich blacklisten? Sie wird dann nicht mehr gescannt.');">
+        <button type="submit" class="secondary" style="padding:0.15rem 0.5rem;font-size:0.8rem;">Blacklisten</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

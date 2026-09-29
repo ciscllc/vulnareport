@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Plugins – Admin-Panel{% endblock %}
+{% block content %}
+<h1>Plugins</h1>
+<p><a href="{{ url_for('admin.dashboard') }}">&larr; zurück</a></p>
+
+<p><a class="btn" href="{{ url_for('admin.upload_plugin') }}">+ Neues Plugin hochladen</a></p>
+
+{% if not plugins %}
+  <p class="muted">Noch keine Plugins hochgeladen.</p>
+{% else %}
+<table>
+  <tr><th>Name</th><th>Version</th><th>Beschreibung</th><th>Status</th><th>Aktionen</th></tr>
+  {% for p in plugins %}
+  <tr>
+    <td>{{ p.name }}</td>
+    <td>{{ p.version }}</td>
+    <td class="muted">{{ p.description }}</td>
+    <td>
+      {% if p.enabled %}
+        <span class="badge badge-verified">aktiv</span>
+      {% else %}
+        <span class="badge badge-pending">inaktiv</span>
+      {% endif %}
+    </td>
+    <td>
+      <form class="inline" method="post" action="{{ url_for('admin.toggle_plugin', plugin_id=p.id) }}">
+        <button type="submit" class="{{ 'secondary' if p.enabled else '' }}" style="padding:0.15rem 0.5rem;font-size:0.8rem;">
+          {{ 'Deaktivieren' if p.enabled else 'Aktivieren' }}
+        </button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<div class="card">
+  <h3>Hinweis zur Plugin-Aktivierung</h3>
+  <p class="muted">
+    Nach dem Hochladen wird die Datei geladen, um Name/Version/Beschreibung
+    auszulesen, aber nicht automatisch aktiviert. Bitte den Code vor der
+    Aktivierung prüfen – aktivierte Plugins laufen mit vollem
+    HTTP-Zugriff gegen alle verifizierten Domains. Wird die Plugin-Datei nach
+    Aktivierung auf der Platte verändert, wird sie beim nächsten Scan wegen
+    Checksum-Mismatch automatisch übersprungen.
+  </p>
+</div>
+{% endblock %}

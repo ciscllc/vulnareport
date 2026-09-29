@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Findings – {{ domain.fqdn }}{% endblock %}
+{% block content %}
+<h1>Gefundene Hinweise: {{ domain.fqdn }}</h1>
+<p><a href="{{ url_for('sysadmin.dashboard') }}">&larr; zurück</a></p>
+
+{% if not findings %}
+  <p class="muted">Keine offenen Findings für diese Domain.</p>
+{% else %}
+  {% for f in findings %}
+  <div class="card">
+    <h3>{{ f.title }} <span class="badge badge-{{ f.severity.value }}">{{ f.severity.value }}</span></h3>
+    <p class="muted">Pfad: <code>{{ f.path or '–' }}</code> · gefunden am {{ f.found_at.strftime('%d.%m.%Y %H:%M') }}</p>
+    <p>{{ f.detail }}</p>
+    <p class="muted">{{ 'Mail versendet' if f.mailed_at else 'Mail noch nicht versendet' }}</p>
+  </div>
+  {% endfor %}
+{% endif %}
+{% endblock %}

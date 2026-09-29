@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Plugin hochladen – Admin-Panel{% endblock %}
+{% block content %}
+<div class="card" style="max-width:600px;">
+  <h2>Neues Plugin hochladen</h2>
+  <form method="post" enctype="multipart/form-data">
+    <label>Plugin-Datei (.py)</label>
+    <input type="file" name="plugin_file" accept=".py" required>
+    <button type="submit">Hochladen</button>
+  </form>
+
+  <h3 style="margin-top:1.5rem;">Erwartete Struktur</h3>
+  <pre style="background:#0d0f14;padding:1rem;border-radius:6px;overflow-x:auto;font-size:0.8rem;">
+from app.scanner.plugin_base import Finding, VulnPlugin
+
+class Plugin(VulnPlugin):
+    name = "mein_plugin"
+    version = "1.0"
+    description = "Kurzbeschreibung"
+    default_severity = "medium"
+    report_title_template = "Vulnerability Report: {domain}"
+
+    def check(self, domain: str, http_client) -> list[Finding]:
+        findings = []
+        # http_client.get(url) -> requests.Response oder None
+        # eigene Prüflogik hier
+        return findings
+  </pre>
+  <p class="muted">
+    Die Klasse muss <code>Plugin</code> heißen und von <code>VulnPlugin</code> erben.
+    Zusätzliche eigene Methoden sind erlaubt (z.B. für individuelle Report-Texte
+    oder weitere Hilfsfunktionen) – der Loader ruft zwingend nur <code>check()</code> auf.
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Mail-Log – Admin-Panel{% endblock %}
+{% block content %}
+<h1>Mail-Log</h1>
+<p><a href="{{ url_for('admin.dashboard') }}">&larr; zurück</a></p>
+
+{% if not logs %}
+  <p class="muted">Noch keine Mails versendet.</p>
+{% else %}
+<table>
+  <tr><th>Domain</th><th>Empfänger</th><th>Betreff</th><th>Status</th><th>Zeitpunkt</th></tr>
+  {% for l in logs %}
+  <tr>
+    <td>{{ l.domain.fqdn }}</td>
+    <td>{{ l.recipient }}</td>
+    <td>{{ l.subject }}</td>
+    <td><span class="badge badge-{{ l.status }}">{{ l.status }}</span></td>
+    <td>{{ (l.sent_at or l.created_at).strftime('%d.%m.%Y %H:%M') }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}
